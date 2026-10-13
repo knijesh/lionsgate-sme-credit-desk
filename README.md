@@ -1,6 +1,6 @@
 # Lionsgate Bank · SME Credit Desk
 
-**Live demo:** https://knijesh.github.io/lionsgate-sme-credit-desk/ · **[Guide: internals and demo script](GUIDE.md)**
+**Live demo:** https://knijesh.github.io/lionsgate-sme-credit-desk-site/ · **[Guide: internals and demo script](GUIDE.md)**
 
 An agentic SME loan-origination demo built around one idea: **agents gather evidence, a policy
 engine decides, people approve within their authority, and everything is recorded.**
@@ -53,7 +53,8 @@ Credit Manager), Margaret Ong (Credit Committee), Aisha Rahman (Head of Credit R
 
 ## Public demo (GitHub Pages)
 
-`node scripts/build-static.js` writes a server-free build to `docs/`: the same engine, desk and
+`node scripts/build-static.js` writes a server-free build to `dist/` (git-ignored), and
+`scripts/publish-site.sh` pushes it to the public site repo `knijesh/lionsgate-sme-credit-desk-site`: the same engine, desk and
 routes are bundled into `desk.bundle.js` and run in the visitor's browser, so every visitor gets a
 private desk and **Reset demo** starts a fresh shift. No keys or back-end URLs are in the build.
 Set `CNAME=demo.example.com` when building to serve it from a custom domain.

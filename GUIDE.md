@@ -3,7 +3,7 @@
 How the demo works under the hood, the rules it enforces, and a click-by-click script for
 presenting it. Lionsgate Bank is fictitious; every company, person and figure is generated.
 
-- Public demo: https://knijesh.github.io/lionsgate-sme-credit-desk/ (runs in your browser)
+- Public demo: https://knijesh.github.io/lionsgate-sme-credit-desk-site/ (runs in your browser)
 - Local: `node server.js` → http://localhost:3100
 
 **Contents:**
@@ -53,7 +53,8 @@ authority) close an application. That separation is the point of the demo.
 | `public/` | The console (plain HTML/CSS/JS, no framework) |
 | `evals/golden.json`, `evals/run.js` | 24-case golden set and its runner / CI gate |
 | `evals/agent-results.json` | Agent evaluation figures (sample data in ADK format) |
-| `scripts/build-static.js`, `scripts/sha256-shim.js` | Builds the public site into `docs/` |
+| `scripts/build-static.js`, `scripts/sha256-shim.js` | Builds the public site into `dist/` |
+| `scripts/publish-site.sh` | Pushes `dist/` to the public site repo (this source repo is private) |
 | `orchestrate/` | OpenAPI tool spec and agent YAML for watsonx Orchestrate |
 | `Dockerfile` | Container for hosting the server (tool back end) |
 
@@ -231,13 +232,13 @@ rules most often in exception or fail. Each chart has hover detail; the daily ch
 | Secrets | `TOOL_API_KEY`, `DEMO_PASSWORD` when hosted | None |
 
 `scripts/build-static.js` bundles `lib/routes.js` and everything it requires (engine, desk, data,
-golden set, JSON) into `docs/desk.bundle.js` with a tiny module loader; Node's `crypto` is replaced
+golden set, JSON) into `dist/desk.bundle.js` with a tiny module loader; Node's `crypto` is replaced
 by the SHA-256 shim and `path` by an empty stub (only the CLI part of `evals/run.js` uses it).
 `public/app.js` detects `window.LocalDesk` and calls it instead of `fetch`. Rebuild after any change:
 
 ```
-node scripts/build-static.js     # CNAME=demo.example.com for a custom domain
-git add -A && git commit && git push
+scripts/publish-site.sh          # builds dist/ and pushes it to the public site repo
+                                 # CNAME=demo.example.com scripts/publish-site.sh for a custom domain
 ```
 
 **Hosted server lock** (`server.js`): with `TOOL_API_KEY` set, a request carrying `x-api-key` may

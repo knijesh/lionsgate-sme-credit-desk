@@ -1,8 +1,8 @@
-// Builds the public, server-free version of the desk into docs/ (served by GitHub Pages).
+// Builds the public, server-free version of the desk into dist/ (published by scripts/publish-site.sh).
 // The same engine, desk and routes run in the visitor's browser; each visitor gets a private desk.
 //   node scripts/build-static.js
 const fs = require('fs'), path = require('path');
-const ROOT = path.join(__dirname, '..'), OUT = path.join(ROOT, 'docs');
+const ROOT = path.join(__dirname, '..'), OUT = path.join(ROOT, 'dist');
 // Node built-ins the desk touches. path is only used by evals/run.js's command-line block, never in the browser.
 const SHIMS = { crypto: 'scripts/sha256-shim.js', path: 'shim:empty' };
 
@@ -74,4 +74,4 @@ const html = fs.readFileSync(path.join(ROOT, 'public/index.html'), 'utf8')
 fs.writeFileSync(path.join(OUT, 'index.html'), html);
 fs.writeFileSync(path.join(OUT, '.nojekyll'), '');
 if (process.env.CNAME) fs.writeFileSync(path.join(OUT, 'CNAME'), process.env.CNAME + '\n');
-console.log(`docs/: ${Object.keys(mods).length} modules bundled · ${(Buffer.byteLength(bundle) / 1024).toFixed(0)} KB`);
+console.log(`dist/: ${Object.keys(mods).length} modules bundled · ${(Buffer.byteLength(bundle) / 1024).toFixed(0)} KB`);
