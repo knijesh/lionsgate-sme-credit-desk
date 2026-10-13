@@ -216,7 +216,7 @@ V.approvals = () => {
       <td><span class="sla ${s.state}"><i style="width:${Math.min(100, s.f * 100)}%"></i></span><span style="font-size:12px" class="${s.state === 'breached' ? 'chip breached' : ''}">${s.left < 0 ? `${hrs(-s.left)} over` : `${hrs(s.left)} left`}</span></td>
       <td>${ss.can ? '<button class="btn sm p">Review</button>' : `<span style="font-size:12px;color:var(--mute)">${esc(ss.why)}</span>`}</td></tr>`;
   }).join('');
-  return `<div class="pagehead"><div><h2>Approvals</h2><p>You are <b>${esc(me.name)}</b>, ${esc(me.title)}. You see what your authority lets you sign; the server enforces the same rules.</p></div>
+  return `<div class="pagehead"><div><h2>Approvals</h2><p>You are <b>${esc(me.name)}</b>, ${esc(me.title)}. You see what your authority lets you sign; the desk enforces the same rules on every decision.</p></div>
     <div class="r filters"><button data-filter="mine" class="${S.filter === 'mine' ? 'on' : ''}">Mine to sign (${mine.length})</button><button data-filter="all" class="${S.filter === 'all' ? 'on' : ''}">Whole queue (${[...S.apps.values()].filter(a => a.stage === 'approval').length})</button></div></div>
   <div class="card" style="padding:6px 10px">${rows ? `<table class="t"><tr><th>Application</th><th class="num">Amount</th><th>Policy engine</th><th>Authority</th><th>Signatures</th><th>SLA</th><th></th></tr>${rows}</table>`
     : `<div class="empty">${S.filter === 'mine' ? `Nothing in the queue needs ${esc(me.title)} authority right now. Switch user in the header, or view the whole queue.` : 'The queue is empty.'}</div>`}</div>
