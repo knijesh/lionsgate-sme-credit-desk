@@ -390,12 +390,19 @@ function seedQueue() {
     purpose: 'two 5-axis CNC machining centres for an aerospace supply contract', amount: 650000, tenorMonths: 60, secured: true,
     collateralType: 'Financed equipment', collateralValue: 820000, yearsTrading: 11, bureauScore: 712, negativeDays90: 1, rm: 'Ravi Kumar', uen: '201512345K',
     financials: { revenue: 3480000, revenuePrior: 3150000, ebitda: 238000, existingDebt: 180000, existingDebtService: 36500 }, directors: 2 });
+  // The demo script relies on a committee case, a decline review and a dual sign-off being in the queue.
   const want = [showcase];
-  while (want.length < 10) {
-    const a = D.makeApplication(qr, { profile: D.pick(qr, ['clean', 'clean', 'exception', 'exception', 'decline']) });
-    const ev = evaluate({ ...D.policyInput(a), documents: [...D.ALL_DOCS, 'valuation_report'] }, S.policy);
-    if (['L1', 'L2', 'L3'].includes(ev.approval && ev.approval.level)) want.push(a);
-  }
+  const take = (ok, profiles) => {
+    for (;;) {
+      const a = D.makeApplication(qr, { profile: D.pick(qr, profiles) });
+      const ev = evaluate({ ...D.policyInput(a), documents: [...D.ALL_DOCS, 'valuation_report'] }, S.policy);
+      if (ev.approval && ['L1', 'L2', 'L3'].includes(ev.approval.level) && ok(ev)) return want.push(a);
+    }
+  };
+  take(ev => ev.approval.level === 'L3', ['clean']);
+  take(ev => ev.decision === 'DECLINE', ['decline']);
+  take(ev => ev.approval.level === 'L2' && ev.decision === 'APPROVE', ['clean']);
+  while (want.length < 10) take(() => true, ['clean', 'clean', 'exception', 'exception', 'decline']);
   want.forEach((a, i) => {
     a.documents = [...D.ALL_DOCS, ...(a.secured ? ['valuation_report'] : [])];
     const created = now - (i === 0 ? 1.4 * H : (0.5 + qr() * 4.2) * H);
@@ -809,7 +816,8 @@ const TRADES = [
 const RMS = ['Ravi Kumar', 'Siti Aminah', 'Jonathan Teo', 'Grace Chua'];
 const EXCLUDED = ['Gambling', 'Crypto exchange'];
 
-const USED = new Set();
+// The showcase applicant in desk.seedQueue() is named by hand; keep generated names clear of it.
+const USED = new Set(['Tanjong Precision Engineering Pte Ltd']);
 const pick = (r, a) => a[Math.floor(r() * a.length)];
 const between = (r, lo, hi) => lo + r() * (hi - lo);
 const roundTo = (v, n) => Math.round(v / n) * n;

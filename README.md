@@ -1,5 +1,7 @@
 # Lionsgate Bank · SME Credit Desk
 
+**Live demo:** https://knijesh.github.io/lionsgate-sme-credit-desk/ · **[Guide: internals and demo script](GUIDE.md)**
+
 An agentic SME loan-origination demo built around one idea: **agents gather evidence, a policy
 engine decides, people approve within their authority, and everything is recorded.**
 
@@ -82,6 +84,8 @@ customer messaging) and are the next step, followed by ADK evaluation datasets
 (`orchestrate evaluations evaluate`) whose summary replaces `evals/agent-results.json`.
 
 ## Five-minute demo
+
+The full script with talking points is in [GUIDE.md § Demo flow](GUIDE.md#13-demo-flow).
 
 1. **Overview**: over a third decided without a person; override rate and guardrails on one screen.
 2. **Applications**: watch an application move through Intake → KYB → Analysis → Policy engine;
