@@ -1,0 +1,115 @@
+openapi: 3.0.3
+info:
+  title: Lionsgate SME credit desk
+  version: 1.0.0
+  description: |
+    The policy engine and read-only case lookups the SME credit agents call. There is deliberately
+    no operation that approves or declines an application: agents cannot decide, only the engine
+    (lgb_evaluate_application) recommends and people approve in the console.
+servers:
+  # The desk's public URL (IBM Cloud Code Engine). Orchestrate cannot reach localhost.
+  - url: https://YOUR-TOOL-BACKEND
+security:
+  - toolKey: []
+paths:
+  /api/policy/evaluate:
+    post:
+      operationId: lgb_evaluate_application
+      summary: Evaluate an SME application against the active credit policy
+      description: |
+        Returns the decision (APPROVE, REFER, DECLINE or PENDING_DOCUMENTS), the risk grade, the
+        price, the approval level the authority matrix requires and the full rule trace with policy
+        clauses. Prohibited attributes (gender, ethnicity, religion, maritalStatus, ownerAge,
+        nationality) are stripped and reported in guardrails.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/Application' }
+      responses:
+        '200':
+          description: Decision with rule trace
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/Decision' }
+  /api/applications/{id}:
+    get:
+      operationId: lgb_get_application
+      summary: Get an application with its agent trail, evaluation and approvals
+      parameters:
+        - { name: id, in: path, required: true, schema: { type: string }, description: 'Application id, e.g. LN-26-10671' }
+      responses:
+        '200': { description: The application, content: { application/json: { schema: { type: object } } } }
+  /api/applications:
+    get:
+      operationId: lgb_list_applications
+      summary: List today's applications with stage, engine decision and approval level
+      responses:
+        '200': { description: Applications, content: { application/json: { schema: { type: array, items: { type: object } } } } }
+components:
+  securitySchemes:
+    toolKey:
+      type: apiKey
+      in: header
+      name: x-api-key
+      description: The desk's TOOL_API_KEY; opens only these three operations.
+  schemas:
+    Application:
+      type: object
+      required: [amount, yearsTrading, industry, bureauScore, negativeDays90, sanctionsHit, bankruptcy, financials, documents]
+      properties:
+        amount: { type: number, description: Requested amount in S$ }
+        tenorMonths: { type: integer, default: 60 }
+        secured: { type: boolean, default: false }
+        collateralValue: { type: number, description: Required when secured }
+        industry: { type: string }
+        yearsTrading: { type: number }
+        bureauScore: { type: integer }
+        negativeDays90: { type: integer, description: Days with a negative balance in the last 90 }
+        sanctionsHit: { type: boolean, description: From the KYB screening result; required, never assumed }
+        bankruptcy: { type: boolean, description: From the bureau report; required, never assumed }
+        documents:
+          type: array
+          items: { type: string, enum: [financials_2y, bank_statements_6m, acra_profile, director_ids, valuation_report] }
+        financials:
+          type: object
+          required: [revenue, revenuePrior, ebitda]
+          properties:
+            revenue: { type: number }
+            revenuePrior: { type: number }
+            ebitda: { type: number }
+            existingDebt: { type: number, default: 0 }
+            existingDebtService: { type: number, default: 0, description: Annual repayments on existing debt }
+    Decision:
+      type: object
+      properties:
+        policyVersion: { type: string }
+        decision: { type: string, enum: [APPROVE, REFER, DECLINE, PENDING_DOCUMENTS] }
+        approval:
+          type: object
+          nullable: true
+          properties:
+            level: { type: string, enum: [STP, L1, L2, L3, AUTO_DECLINE] }
+            label: { type: string }
+            approvers: { type: integer }
+            slaHours: { type: number }
+        grade: { type: integer, minimum: 1, maximum: 10 }
+        pricing: { type: object, properties: { baseRate: { type: number }, spread: { type: number }, rate: { type: number } } }
+        metrics: { type: object, properties: { dscr: { type: number }, leverage: { type: number }, ltv: { type: number, nullable: true }, revenueGrowth: { type: number } } }
+        exceptions: { type: array, items: { type: string } }
+        declineReasons: { type: array, items: { type: string } }
+        missingDocs: { type: array, items: { type: string } }
+        guardrails: { type: array, items: { type: object } }
+        trace:
+          type: array
+          items:
+            type: object
+            properties:
+              id: { type: string }
+              clause: { type: string }
+              name: { type: string }
+              actual: {}
+              threshold: {}
+              exceptionLimit: {}
+              result: { type: string, enum: [pass, exception, fail, n/a] }
+        hash: { type: string }

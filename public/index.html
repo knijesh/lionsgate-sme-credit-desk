@@ -1,0 +1,30 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Lionsgate Bank · SME Credit Desk</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Serif:wght@500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/app.css">
+</head><body>
+<header>
+  <svg class="logo" width="26" height="28" viewBox="0 0 26 28" aria-hidden="true"><path d="M13 1 24 5v8c0 7-4.6 11.6-11 14C6.6 24.6 2 20 2 13V5z" fill="#c9a227"/><path d="M13 3.4 22 6.7V13c0 5.7-3.6 9.6-9 11.8C7.6 22.6 4 18.7 4 13V6.7z" fill="#0b1f3a"/><text x="13" y="18.5" text-anchor="middle" font-family="IBM Plex Serif,Georgia,serif" font-weight="600" font-size="13" fill="#e2c46b">L</text></svg>
+  <h1><span class="brand">Lionsgate Bank</span><b>SME Credit Desk</b></h1>
+  <nav id="nav">
+    <a href="#overview" data-v="overview">Overview</a>
+    <a href="#applications" data-v="applications">Applications</a>
+    <a href="#approvals" data-v="approvals">Approvals <span class="nb" id="nb-appr"></span></a>
+    <a href="#policy" data-v="policy">Policy engine <span class="nb" id="nb-pol"></span></a>
+    <a href="#evals" data-v="evals">Evaluations</a>
+    <a href="#tower" data-v="tower">Control tower</a>
+  </nav>
+  <span class="pv" id="pv" title="Active credit policy">Policy v–</span>
+  <span class="clock"><i class="live"></i><span id="clock"></span></span>
+  <label class="who"><span>Signed in as</span><select id="user"></select></label>
+</header>
+<main id="view"></main>
+<footer>Lionsgate Bank is a fictitious bank. Every company, person and figure on this page is generated for demonstration.</footer>
+<aside id="drawer" aria-hidden="true"><div class="dw-in" id="dw"></div></aside>
+<div id="scrim"></div>
+<div id="tip" role="tooltip"></div>
+<div id="toast"></div>
+<script src="/app.js"></script>
+</body></html>

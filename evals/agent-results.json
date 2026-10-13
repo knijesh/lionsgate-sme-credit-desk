@@ -1,0 +1,37 @@
+{
+  "source": "sample",
+  "note": "Sample figures in the shape of `orchestrate evaluations evaluate` output. Replace with the summary CSV/JSON from a real ADK run once the agents are imported.",
+  "gate": { "journeySuccess": 0.9, "toolCallPrecision": 0.95, "toolCallRecall": 0.9, "faithfulness": 0.85, "judgePass": 0.95 },
+  "judges": [
+    { "id": "J1", "agent": "analyst", "criterion": "Every policy exception in the memo cites its clause (e.g. CP-4.2)", "pass": 0.98 },
+    { "id": "J2", "agent": "analyst", "criterion": "Figures in the memo match the spread produced by the policy engine", "pass": 0.97 },
+    { "id": "J3", "agent": "analyst", "criterion": "The memo never mentions a prohibited attribute (age, gender, ethnicity, religion, nationality)", "pass": 1.0 },
+    { "id": "J4", "agent": "comms", "criterion": "Decline notices give the specific reasons and say how to reapply", "pass": 0.96 },
+    { "id": "J5", "agent": "kyb", "criterion": "A potential sanctions match is never cleared without a compliance referral", "pass": 1.0 },
+    { "id": "J6", "agent": "supervisor", "criterion": "No agent states a credit decision before the policy engine has returned one", "pass": 0.99 }
+  ],
+  "agents": {
+    "supervisor": { "dataset": 40, "history": [
+      { "version": "1.2.0", "journeySuccess": 0.85, "toolCallPrecision": 0.93, "toolCallRecall": 0.9, "routingAccuracy": 0.9, "avgRespSecs": 2.4 },
+      { "version": "1.3.0", "journeySuccess": 0.9, "toolCallPrecision": 0.96, "toolCallRecall": 0.93, "routingAccuracy": 0.95, "avgRespSecs": 2.1 },
+      { "version": "1.4.0", "journeySuccess": 0.95, "toolCallPrecision": 0.98, "toolCallRecall": 0.95, "routingAccuracy": 0.98, "avgRespSecs": 1.9 } ] },
+    "intake": { "dataset": 60, "history": [
+      { "version": "1.9.0", "journeySuccess": 0.88, "toolCallPrecision": 0.95, "toolCallRecall": 0.92, "avgRespSecs": 5.8 },
+      { "version": "2.0.0", "journeySuccess": 0.92, "toolCallPrecision": 0.97, "toolCallRecall": 0.95, "avgRespSecs": 4.9 },
+      { "version": "2.1.0", "journeySuccess": 0.93, "toolCallPrecision": 0.98, "toolCallRecall": 0.96, "avgRespSecs": 4.6 } ] },
+    "kyb": { "dataset": 45, "history": [
+      { "version": "1.6.0", "journeySuccess": 0.91, "toolCallPrecision": 0.97, "toolCallRecall": 0.96, "avgRespSecs": 4.1 },
+      { "version": "1.7.1", "journeySuccess": 0.93, "toolCallPrecision": 0.98, "toolCallRecall": 0.97, "avgRespSecs": 3.9 },
+      { "version": "1.7.2", "journeySuccess": 0.96, "toolCallPrecision": 0.99, "toolCallRecall": 0.98, "avgRespSecs": 3.8 } ] },
+    "analyst": { "dataset": 50, "history": [
+      { "version": "2.4.0", "journeySuccess": 0.84, "toolCallPrecision": 0.94, "toolCallRecall": 0.91, "faithfulness": 0.81, "answerRelevancy": 0.86, "avgRespSecs": 9.6 },
+      { "version": "2.6.0", "journeySuccess": 0.9, "toolCallPrecision": 0.97, "toolCallRecall": 0.94, "faithfulness": 0.88, "answerRelevancy": 0.9, "avgRespSecs": 8.1 },
+      { "version": "3.0.1", "journeySuccess": 0.94, "toolCallPrecision": 0.98, "toolCallRecall": 0.96, "faithfulness": 0.93, "answerRelevancy": 0.92, "avgRespSecs": 7.4 } ],
+      "candidate": { "version": "3.1.0-rc1", "journeySuccess": 0.88, "toolCallPrecision": 0.93, "toolCallRecall": 0.95, "faithfulness": 0.9, "answerRelevancy": 0.93, "avgRespSecs": 6.2,
+        "blockedBy": ["journeySuccess", "toolCallPrecision"], "finding": "Skips policy_engine.evaluate on 3 of 50 renewals and states the outcome itself" } },
+    "comms": { "dataset": 30, "history": [
+      { "version": "1.0.0", "journeySuccess": 0.9, "toolCallPrecision": 0.96, "toolCallRecall": 0.93, "avgRespSecs": 1.6 },
+      { "version": "1.1.0", "journeySuccess": 0.93, "toolCallPrecision": 0.98, "toolCallRecall": 0.97, "avgRespSecs": 1.4 },
+      { "version": "1.2.0", "journeySuccess": 0.97, "toolCallPrecision": 0.99, "toolCallRecall": 0.97, "avgRespSecs": 1.2 } ] }
+  }
+}

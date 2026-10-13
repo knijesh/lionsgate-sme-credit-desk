@@ -1,0 +1,48 @@
+{
+  "id": "LGB-SME-CREDIT",
+  "name": "Lionsgate Bank SME credit policy",
+  "version": "3.2",
+  "effective": "2026-10-01",
+  "owner": "Credit Risk Policy",
+  "prohibitedInputs": ["gender", "ethnicity", "religion", "maritalStatus", "ownerAge", "nationality"],
+  "stressRate": 0.075,
+  "documents": {
+    "always": ["financials_2y", "bank_statements_6m", "acra_profile", "director_ids"],
+    "secured": ["valuation_report"]
+  },
+  "knockouts": [
+    { "id": "K1", "clause": "CP-2.1", "name": "Trading history", "field": "yearsTrading", "op": ">=", "value": 2, "unit": "yrs" },
+    { "id": "K2", "clause": "CP-2.4", "name": "No sanctions or PEP match", "field": "sanctionsHit", "op": "==", "value": false },
+    { "id": "K3", "clause": "CP-2.3", "name": "Industry not excluded", "field": "industry", "op": "notIn", "value": ["Gambling", "Weapons", "Crypto exchange"] },
+    { "id": "K4", "clause": "CP-2.5", "name": "No bankruptcy or winding-up", "field": "bankruptcy", "op": "==", "value": false },
+    { "id": "K5", "clause": "CP-2.2", "name": "Within product cap", "field": "amount", "op": "<=", "value": 5000000, "unit": "S$" }
+  ],
+  "credit": [
+    { "id": "C1", "clause": "CP-4.2", "name": "Debt service coverage (DSCR)", "field": "dscr", "op": ">=", "value": 1.25, "exception": 1.10, "unit": "x" },
+    { "id": "C2", "clause": "CP-4.3", "name": "Leverage (debt / EBITDA)", "field": "leverage", "op": "<=", "value": 3.5, "exception": 4.5, "unit": "x" },
+    { "id": "C3", "clause": "CP-4.1", "name": "Bureau score", "field": "bureauScore", "op": ">=", "value": 620, "exception": 580 },
+    { "id": "C4", "clause": "CP-5.1", "name": "Loan to value (secured)", "field": "ltv", "op": "<=", "value": 0.80, "exception": 0.90, "unit": "%", "when": "secured" },
+    { "id": "C5", "clause": "CP-4.6", "name": "Negative balance days (90d)", "field": "negativeDays90", "op": "<=", "value": 5, "exception": 10, "unit": "days" },
+    { "id": "C6", "clause": "CP-4.4", "name": "Revenue growth", "field": "revenueGrowth", "op": ">=", "value": -0.15, "exception": -0.25, "unit": "%" }
+  ],
+  "grading": [
+    { "field": "dscr", "better": "higher", "bands": [[2.0, 0], [1.6, 1], [1.35, 2], [1.25, 3], [null, 4]] },
+    { "field": "leverage", "better": "lower", "bands": [[1.5, 0], [2.5, 1], [3.5, 2], [null, 3]] },
+    { "field": "bureauScore", "better": "higher", "bands": [[750, 0], [690, 1], [640, 2], [null, 3]] },
+    { "field": "yearsTrading", "better": "higher", "bands": [[10, 0], [5, 1], [null, 2]] },
+    { "field": "negativeDays90", "better": "lower", "bands": [[0, 0], [5, 1], [null, 2]] }
+  ],
+  "pricing": {
+    "baseRate": 3.0,
+    "spreadByGrade": [1.6, 1.9, 2.2, 2.6, 3.0, 3.5, 4.1, 4.8, 5.6, 6.5],
+    "securedDiscount": 0.4
+  },
+  "authority": [
+    { "level": "STP", "label": "Straight-through", "maxAmount": 100000, "maxGrade": 3, "maxExceptions": 0, "approvers": 0, "slaHours": 0 },
+    { "level": "L1", "label": "Credit Officer", "maxAmount": 250000, "maxGrade": 5, "maxExceptions": 0, "approvers": 1, "slaHours": 4 },
+    { "level": "L2", "label": "Dual sign-off", "maxAmount": 1000000, "maxGrade": 7, "maxExceptions": 1, "approvers": 2, "slaHours": 8 },
+    { "level": "L3", "label": "Credit Committee", "maxAmount": null, "maxGrade": 10, "maxExceptions": 99, "approvers": 1, "slaHours": 48 }
+  ],
+  "declineReview": { "level": "L1", "label": "Decline review", "approvers": 1, "slaHours": 4 },
+  "stpQaSampleRate": 0.1
+}
