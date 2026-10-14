@@ -155,7 +155,7 @@ V.overview = () => {
   const ttd = hBars(m.ttd.map(t => ({ label: t.label, value: t.medianHours || 0, tip: `<b>${t.label}</b><br>Median ${hrs(t.medianHours)}<br>${t.n} decisions` })), { fmt: hrs, labelW: 120, W: 400 });
   const rules = hStack(m.ruleHits.slice(0, 7), [{ key: 'exception', label: 'Exception (needs approval)', color: 'var(--s1)' }, { key: 'fail', label: 'Outside policy (decline)', color: 'var(--s2)' }]);
   return `
-  <div class="pagehead"><div><h2>Good ${new Date().getHours() < 12 ? 'morning' : 'afternoon'}, ${esc((S.users[S.user] || {}).name || '').split(' ')[0]}</h2><p>Agents prepare every application; policy ${esc(m.policyVersion)} decides; people approve within their authority.</p></div>
+  <div class="pagehead"><div><h2>Good ${new Date().getHours() < 12 ? 'morning' : 'afternoon'}, ${esc((S.users[S.user] || {}).name || '').split(' ')[0]}</h2><p>Agents prepare every application; policy ${esc(m.policyVersion)} decides; people approve within their authority.</p><span class="wxo" title="Agent and tool definitions for IBM watsonx Orchestrate. Agent steps in this demo are simulated."><i></i>Agents built for IBM watsonx Orchestrate</span></div>
     <div class="r"><button class="btn p" data-go="approvals">Open approvals</button></div></div>
   <div class="row kpis">${kpis}</div>
   <div class="row" style="grid-template-columns:minmax(0,2fr) minmax(0,1fr)">
@@ -398,7 +398,7 @@ V.tower = () => {
   const v = au.verify;
   return `<div class="pagehead"><div><h2>Control tower</h2><p>Every agent, its owner and health, and a tamper-evident record of what each one did.</p></div></div>
   <div class="card" style="margin-bottom:16px"><h2>How a credit decision is made</h2><div class="arch" style="margin-top:10px">
-    <div class="bx"><b>Agents gather evidence</b>Intake, KYB and Credit Analyst agents extract, screen and spread. They never decide.</div><div class="ar">→</div>
+    <div class="bx"><b>Agents gather evidence</b>Intake, KYB and Credit Analyst agents, built for IBM watsonx Orchestrate, extract, screen and spread. They never decide.</div><div class="ar">→</div>
     <div class="bx eng"><b>Policy engine decides</b>Deterministic rules v${esc(m.policyVersion)} · full trace · same input, same answer.</div><div class="ar">→</div>
     <div class="bx"><b>Authority matrix routes</b>Straight-through, Credit Officer, dual sign-off or Committee by amount, grade and exceptions.</div><div class="ar">→</div>
     <div class="bx hum"><b>People approve</b>Segregation of duties enforced on the server. Overrides need a reason and are reported.</div><div class="ar">→</div>
