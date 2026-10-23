@@ -165,4 +165,5 @@ alongside a tamper-evident audit trail anyone can verify.
 
 ## About this repository
 
-This repository holds only the built site. The source is maintained privately.
+This repository holds only the built site. The full source is at
+[knijesh/lionsgate-sme-credit-desk](https://github.com/knijesh/lionsgate-sme-credit-desk).

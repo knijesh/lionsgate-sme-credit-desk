@@ -54,7 +54,7 @@ authority) close an application. That separation is the point of the demo.
 | `evals/golden.json`, `evals/run.js` | 24-case golden set and its runner / CI gate |
 | `evals/agent-results.json` | Agent evaluation figures (sample data in ADK format) |
 | `scripts/build-static.js`, `scripts/sha256-shim.js` | Builds the public site into `dist/` |
-| `scripts/publish-site.sh` | Pushes `dist/` to the public site repo (this source repo is private) |
+| `scripts/publish-site.sh` | Pushes `dist/` to the public site repo |
 | `orchestrate/` | OpenAPI tool spec and agent YAML for watsonx Orchestrate |
 | `Dockerfile` | Container for hosting the server (tool back end) |
 

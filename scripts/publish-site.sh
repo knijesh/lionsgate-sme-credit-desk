@@ -1,6 +1,7 @@
 #!/bin/sh
 # Builds the static demo and pushes it to the public site repo (GitHub Pages serves its root).
-# The source repo stays private; only the built files and site/ (README, screenshots) are published.
+# This source repo is public; the script publishes the built demo and site/ (README, screenshots)
+# to the separate site repo.
 #   scripts/publish-site.sh ["commit message"]
 set -eu
 SITE_REPO="${SITE_REPO:-knijesh/lionsgate-sme-credit-desk-site}"
